@@ -13,20 +13,26 @@ Satisfiability aims to find assignment for variables that make the formula true.
 
 Formulas consists of
 
-* boolean constants:
-  * false $⊥$
-  * true $⊤$
-* boolean variables:
-  * $x∈\{⊥,⊤\}$
-* connectives: 
-  * and $∧$
-  * or $∨$
-  * not $¬$
+Boolean constants:
+
+* false $⊥$
+* true $⊤$
+
+Boolean variables:
+
+* $x∈\{⊥,⊤\}$
+
+Connectives: 
+
+* and $∧$
+* or $∨$
+* not $¬$
 
 There are also other useful connectives such as
-  * implication $→$
-  * bi-implication $↔$
-  * xor $⊗$
+
+* implication $→$
+* bi-implication $↔$
+* exclusive-or $⊗$
 
 These can be written in terms of "and", "or", and "not" connectives.
 
@@ -125,3 +131,40 @@ $$\min \left(∑_{i=1}^{n-1} d(y_{i},y_{i+1}) + d(y_n,y_1)\right)$$
 We can use the **MiniZinc** modeling language for modeling.
 
 The **Google OR-Tools** solver is effective for solving combinatorial optimization problems.
+
+
+## Example: Modeling Absolute Value Constraint
+Absolute value is defined as follows.
+
+$$|x|=\begin{cases}
+-x, & x<0 \\
+x, & x≥0
+\end{cases}$$
+
+Control flow: "if ... then ... else ..."
+
+---
+
+We have variable $x∈ℝ,$ parameter $c∈ℝ,$ and constraint $|x|=c.$ 
+
+We can model the constraint using logic as a disjuction:
+
+$$ϕ≡ϕ_{(<)}∨ϕ_{(≥)}$$
+
+where
+
+- $ϕ_{(<)}=(x<0)∧(-x=c)$
+- $ϕ_{(≥)}=(x≥0)∧(x=c)$
+
+We should note that
+
+$$¬(x≥0)≡(x<0).$$
+
+The constraint is satisfied if
+
+* $x$ is negative and $-x$ is equal to $c$, or
+* $x$ is non-negative and $x$ is equal to $c.$
+
+---
+
+Is is possible to automatically reduce logic to equivalent (Mixed) Integer Programming formulations?
